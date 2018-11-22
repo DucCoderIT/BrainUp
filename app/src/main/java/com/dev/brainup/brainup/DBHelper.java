@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.dev.brainup.brainup.Constants.Game;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -53,8 +55,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public void createDefaultGame()  {
         int count = this.getGamesCount();
         if(count ==0 ) {
-            Game game1 = new Game("animals",1,"animalsdog","dog","cat","mickey");
-            Game game2 = new Game("animals",1,"animalscat","bufferlow","fly","cat");
+            Game game1 = new Game(0,"animals",1,"animalsdog","dog","cat","mickey");
+            Game game2 = new Game(1,"animals",1,"animalscat","bufferlow","fly","cat");
             this.addGame(game1);
             this.addGame(game2);
         }

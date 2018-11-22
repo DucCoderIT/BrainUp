@@ -1,13 +1,15 @@
-package com.dev.brainup.brainup;
+package com.dev.brainup.brainup.Activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class GameWriteActivity extends AppCompatActivity {
+import com.dev.brainup.brainup.R;
+
+public class GameTypeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game_write);
+        setContentView(R.layout.activity_game_type);
     }
 }

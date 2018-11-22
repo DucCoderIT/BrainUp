@@ -1,7 +1,6 @@
-package com.dev.brainup.brainup;
+package com.dev.brainup.brainup.Constants;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Game {
     public ArrayList<Game> arrayList = new ArrayList<Game>();

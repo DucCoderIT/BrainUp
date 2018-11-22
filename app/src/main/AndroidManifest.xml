@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".MainActivity">
+        <activity android:name=".Activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -17,9 +17,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SelectModeActivity" />
-        <activity android:name=".GameSelectActivity" />
-        <activity android:name=".GameWriteActivity"></activity>
+        <activity android:name=".Activities.SelectModeActivity" />
+        <activity android:name=".Activities.GameSelectActivity" />
+        <activity android:name=".Activities.GameWriteActivity" />
+        <activity android:name=".Activities.GameTypeActivity"/>
     </application>
-
 </manifest>
