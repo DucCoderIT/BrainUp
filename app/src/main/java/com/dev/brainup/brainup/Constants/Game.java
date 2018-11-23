@@ -3,7 +3,6 @@ package com.dev.brainup.brainup.Constants;
 import java.util.ArrayList;
 
 public class Game {
-    public ArrayList<Game> arrayList = new ArrayList<Game>();
     private int gameID;
     private String gametype;
     private int level;
@@ -11,7 +10,6 @@ public class Game {
     private String resultfalse1;
     private String resultfalse2;
     private String resulttrue;
-
     public Game() {
     }
 

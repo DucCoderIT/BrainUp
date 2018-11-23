@@ -40,6 +40,22 @@ public class DBHelper extends SQLiteOpenHelper {
                 + GAME_COLUMN_RESULTFALSE1+" TEXT,"+ GAME_COLUMN_RESULTFALSE2 +" TEXT," +GAME_COLUMN_RESULTTRUE+" TEXT"+ ")";
         // Execute Script.
         db.execSQL(script);
+        Log.d(TAG, "onCreate: create database completed");
+            String addGame = "INSERT INTO "+ GAME_TABLE_NAME+"("+GAME_COLUMN_ID+","+GAME_COLUMN_TYPE+","
+                    +GAME_COLUMN_LEVEL+","+GAME_COLUMN_IMAGE+","+GAME_COLUMN_RESULTFALSE1+","+GAME_COLUMN_RESULTFALSE2+","+GAME_COLUMN_RESULTTRUE
+                    +") VALUES (0,\"animals\",1,\"animals_dog\",\"scorpion\",\"cobra\",\"dog\")," +
+                    "(1,\"animals\",1,\"animals_cat\",\"buffalo\",\"bat\",\"cat\")," +
+                    "(2,\"animals\",1,\"animals_butterfly\",\"wolf\",\"fly\",\"butterfly\")," +
+                    "(3,\"animals\",1,\"animals_lion\",\"beaver\",\"chipmunk\",\"lion\")," +
+                    "(4,\"animals\",1,\"animals_elephant\",\"deer\",\"cow\",\"elephant\")," +
+                    "(5,\"animals\",1,\"animals_fish\",\"alligator\",\"dolphin\",\"fish\")," +
+                    "(6,\"animals\",1,\"animals_frog\",\"whale\",\"swordfish\",\"frog\")," +
+                    "(7,\"animals\",1,\"animals_chicken\",\"walrus\",\"shark\",\"chicken\")," +
+                    "(8,\"animals\",1,\"animals_horse\",\"penguin\",\"scorpion\",\"horse\")," +
+                    "(9,\"animals\",1,\"animals_fox\",\"turtle\",\"antelope\",\"fox\")," +
+                    "(10,\"animals\",1,\"animals_buffalo\",\"cow\",\"penguin\",\"buffalo\");";
+            db.execSQL(addGame);
+        Log.d(TAG, "onCreate: insert data completed");
     }
 
     @Override
@@ -52,15 +68,6 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void createDefaultGame()  {
-        int count = this.getGamesCount();
-        if(count ==0 ) {
-            Game game1 = new Game(0,"animals",1,"animalsdog","dog","cat","mickey");
-            Game game2 = new Game(1,"animals",1,"animalscat","bufferlow","fly","cat");
-            this.addGame(game1);
-            this.addGame(game2);
-        }
-    }
 
     public int getGamesCount() {
         Log.i(TAG, "MyDatabaseHelper.getGamesCount ... " );
@@ -96,6 +103,28 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    public ArrayList<Game> getAllGameType(String gametype){
+        ArrayList<Game> game_type_arr = new ArrayList<Game>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("select * from "+GAME_TABLE_NAME+" where gametype = \""+gametype+"\"",null );
+
+        if (cursor.moveToFirst()){
+            do{
+                Game game = new Game();
+                game.setGameID(Integer.parseInt(cursor.getString(0)));
+                game.setGametype(cursor.getString(1));
+                game.setLevel(Integer.parseInt(cursor.getString(2)));
+                game.setImage(cursor.getString(3));
+                game.setResultfalse1(cursor.getString(4));
+                game.setResultfalse2(cursor.getString(5));
+                game.setResulttrue(cursor.getString(6));
+                // Adding note to list
+                game_type_arr.add(game);
+            } while (cursor.moveToNext());
+        }
+        return game_type_arr;
+    }
 
     public ArrayList<Game> getAllGames() {
         ArrayList<Game> game_list = new ArrayList<Game>();

@@ -35,7 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="VEGATABLES"
+                android:textAllCaps="true"
                 android:textSize="20sp"
                 android:textStyle="bold"/>
             <RadioButton
@@ -43,7 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="FOOTBALL"
+                android:textAllCaps="true"
                 android:textSize="20sp"
                 android:textStyle="bold"/>
             <RadioButton
@@ -51,7 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="SPORT"
+                android:textAllCaps="true"
                 android:textSize="20sp"
                 android:textStyle="bold"/>
         </RadioGroup>
