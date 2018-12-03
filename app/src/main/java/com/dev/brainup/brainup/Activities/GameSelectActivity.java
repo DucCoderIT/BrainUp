@@ -3,17 +3,16 @@ package com.dev.brainup.brainup.Activities;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.CountDownTimer;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -48,6 +47,8 @@ public class GameSelectActivity extends AppCompatActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_select);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        startService(new Intent(this,ServiceMusic.class));
         countDownTimer = new CountDownTimer(60000, 1000) {
             public void onTick(long millisUntilFinished) {
                 tv_countdowntime.setText("Time: " + millisUntilFinished / 1000);
@@ -66,6 +67,39 @@ public class GameSelectActivity extends AppCompatActivity implements View.OnClic
         }
         //count down time in game
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart: ");
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: ");
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause: ");
+    }
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d(TAG, "onRestart: ");
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop: ");
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: ");
+        //stopService(new Intent(this,ServiceMusic.class));
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -180,6 +214,11 @@ public class GameSelectActivity extends AppCompatActivity implements View.OnClic
         Menu = (Button) menuDialog.findViewById(R.id.Menu);
         Exit = (Button) menuDialog.findViewById(R.id.Exit);
 
+        menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        if (!this.isFinishing()){
+            menuDialog.show();
+        }
+
         Resume.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -202,12 +241,10 @@ public class GameSelectActivity extends AppCompatActivity implements View.OnClic
             public void onClick(View v) {
                 menuDialog.cancel();
                 stopService(new Intent(getApplicationContext(),ServiceMusic.class));
-                finishAffinity();
+                finish();
             }
         });
 
-        menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        menuDialog.show();
     }
     private void showEndDialog(String tv){
         menuDialog = new Dialog(this);
@@ -216,7 +253,11 @@ public class GameSelectActivity extends AppCompatActivity implements View.OnClic
         GoBackMenu = (Button) menuDialog.findViewById(R.id.btnBackMenu);
         tvTitleEnd = (TextView) menuDialog.findViewById(R.id.tvTitleEnd);
         tvScore = (TextView) menuDialog.findViewById(R.id.tvScore);
-
+        menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        menuDialog.setCancelable(false);
+        if (!this.isFinishing()){
+            menuDialog.show();
+        }
         if (!(tv.equals(""))){
             tvTitleEnd.setText(tv);
         }
@@ -225,7 +266,7 @@ public class GameSelectActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void onClick(View v) {
                 countScore = 0;
-                level = 0;
+                level = 2;
                 RandomGame();
                 setInfoGame(countGame);
                 radioGroup.clearCheck();
@@ -244,15 +285,15 @@ public class GameSelectActivity extends AppCompatActivity implements View.OnClic
             }
         });
 
-        menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        menuDialog.setCancelable(false);
-        menuDialog.show();
+
     }
     private void showWrongDialog(){
         menuDialog = new Dialog(this);
         menuDialog.setContentView(R.layout.wrong_dialog);
         menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        menuDialog.show();
+        if (!this.isFinishing()){
+            menuDialog.show();
+        }
     }
     private void showCongraDialog(){
         menuDialog = new Dialog(this);
@@ -260,6 +301,10 @@ public class GameSelectActivity extends AppCompatActivity implements View.OnClic
         menuDialog.setCanceledOnTouchOutside(false);
         menuDialog.setCancelable(false);
         btnNextgame = (Button) menuDialog.findViewById(R.id.btnNextgame);
+        menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        if (!this.isFinishing()){
+            menuDialog.show();
+        }
         btnNextgame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -275,7 +320,6 @@ public class GameSelectActivity extends AppCompatActivity implements View.OnClic
             }
         });
 
-        menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        menuDialog.show();
+
     }
 }

@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 
 public class ServiceMusic extends android.app.Service {
     private MediaPlayer mediaPlayer;
+    public static Boolean serviceRunning = false;
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -15,6 +16,7 @@ public class ServiceMusic extends android.app.Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        serviceRunning = true;
         mediaPlayer = MediaPlayer.create(this, R.raw.music);
         mediaPlayer.setLooping(true);
         mediaPlayer.start();
@@ -25,5 +27,6 @@ public class ServiceMusic extends android.app.Service {
     public void onDestroy() {
         super.onDestroy();
         mediaPlayer.stop();
+        serviceRunning = false;
     }
 }

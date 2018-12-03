@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -42,6 +43,8 @@ public class GameWriteActivity extends AppCompatActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_write);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        startService(new Intent(this,ServiceMusic.class));
         countDownTimer = new CountDownTimer(60000, 1000) {
             public void onTick(long millisUntilFinished) {
                 tv_countdowntime.setText("Time: " + millisUntilFinished / 1000);
@@ -60,6 +63,37 @@ public class GameWriteActivity extends AppCompatActivity implements View.OnClick
         }
         //count down time in game
 
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart: ");
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: ");
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause: ");
+    }
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d(TAG, "onRestart: ");
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop: ");
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: ");
+        //stopService(new Intent(this,ServiceMusic.class));
     }
 
     @Override
@@ -166,12 +200,14 @@ public class GameWriteActivity extends AppCompatActivity implements View.OnClick
             public void onClick(View v) {
                 menuDialog.cancel();
                 stopService(new Intent(getApplicationContext(),ServiceMusic.class));
-                finishAffinity();
+                finish();
             }
         });
 
         menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        menuDialog.show();
+        if (!this.isFinishing()){
+            menuDialog.show();
+        }
     }
     private void showEndDialog(String tv){
         menuDialog = new Dialog(this);
@@ -210,13 +246,17 @@ public class GameWriteActivity extends AppCompatActivity implements View.OnClick
 
         menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         menuDialog.setCancelable(false);
-        menuDialog.show();
+        if (!this.isFinishing()){
+            menuDialog.show();
+        }
     }
     private void showWrongDialog(){
         menuDialog = new Dialog(this);
         menuDialog.setContentView(R.layout.wrong_dialog);
         menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        menuDialog.show();
+        if (!this.isFinishing()){
+            menuDialog.show();
+        }
     }
     private void showCongraDialog(){
         menuDialog = new Dialog(this);
@@ -240,6 +280,8 @@ public class GameWriteActivity extends AppCompatActivity implements View.OnClick
         });
 
         menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        menuDialog.show();
+        if (!this.isFinishing()){
+            menuDialog.show();
+        }
     }
 }
