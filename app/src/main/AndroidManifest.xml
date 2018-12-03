@@ -21,5 +21,6 @@
         <activity android:name=".Activities.GameSelectActivity" />
         <activity android:name=".Activities.GameWriteActivity" />
         <activity android:name=".Activities.GameTypeActivity"/>
+        <service android:name=".ServiceMusic"/>
     </application>
 </manifest>

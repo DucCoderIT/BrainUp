@@ -1,5 +1,10 @@
 package com.dev.brainup.brainup.Activities;
 
+import android.app.Dialog;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,22 +13,27 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dev.brainup.brainup.Constants.Game;
 import com.dev.brainup.brainup.DBHelper;
 import com.dev.brainup.brainup.R;
+import com.dev.brainup.brainup.ServiceMusic;
 
 import java.util.ArrayList;
 
 public class GameWriteActivity extends AppCompatActivity implements View.OnClickListener {
     private ImageView imgView_game;
+    private TextView tv_countdowntime,tvTitleEnd;
     private EditText edt_Result;
-    private Button btn_sendResult;
+    private Button btn_sendResult, Resume,Menu,Exit,GoBackMenu,RePlay;
     private String typeGame;
     private String TAG = "LOG GAME WRITE";
     private ArrayList<Game> game_type_list;
     private int countGame;
+    private Dialog menuDialog;
+    private boolean countWrongtime = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,8 +44,18 @@ public class GameWriteActivity extends AppCompatActivity implements View.OnClick
             countGame = 0;
             setInfoGame(countGame);
         }
-    }
+        //count down time in game
+        new CountDownTimer(60000, 1000) {
 
+            public void onTick(long millisUntilFinished) {
+                tv_countdowntime.setText("Thời gian đếm ngược: " + millisUntilFinished / 1000);
+            }
+
+            public void onFinish() {
+                showEndDialog("TIME'S UP");
+            }
+        }.start();
+    }
 
     @Override
     public void onClick(View view){
@@ -51,19 +71,25 @@ public class GameWriteActivity extends AppCompatActivity implements View.OnClick
                     edt_Result.isClickable();
                 }
                 else {
-                    Toast.makeText(this, "Sai rồi bạn ơi! Chơi lại từ đầu nhé!", Toast.LENGTH_SHORT).show();
+                    if (countWrongtime){
+                        showWrongDialog();
+                        countWrongtime = false;
+                    }else{
+                        showEndDialog("");
+                    }
                 }
                 break;
         }
     }
+
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        Toast.makeText(this, "pause", Toast.LENGTH_SHORT).show();
-        return super.onKeyDown(keyCode, event);
+    public void onBackPressed() {
+        showMenuDialog();
     }
 
     private void handle(){
         imgView_game = (ImageView) findViewById(R.id.imgview_game);
+        tv_countdowntime = (TextView) findViewById(R.id.tv_countdowntime_W);
         edt_Result = (EditText) findViewById(R.id.edt_result);
         btn_sendResult = (Button) findViewById(R.id.btn_sendresult);
         btn_sendResult.setOnClickListener(this);
@@ -77,8 +103,78 @@ public class GameWriteActivity extends AppCompatActivity implements View.OnClick
         game_type_list = dbHelper.getAllGameType(typeGame);
         Log.d(TAG, "getInfoGame: "+game_type_list.size());
     }
+
     private void setInfoGame(int position){
-        int id = getResources().getIdentifier(game_type_list.get(position).getImage(),"mipmap",getPackageName());
+        int id = getResources().getIdentifier(game_type_list.get(position).getImage(),"raw",getPackageName());
         imgView_game.setImageResource(id);
+    }
+
+    private void showMenuDialog(){
+        menuDialog = new Dialog(this);
+        menuDialog.setContentView(R.layout.menu_dialog);
+        menuDialog.setCancelable(false);
+        Resume = (Button) menuDialog.findViewById(R.id.Resume);
+        Menu = (Button) menuDialog.findViewById(R.id.Menu);
+        Exit = (Button) menuDialog.findViewById(R.id.Exit);
+
+        Resume.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                menuDialog.dismiss();
+            }
+        });
+        Menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                stopService(new Intent(getApplicationContext(),ServiceMusic.class));
+            }
+        });
+        Exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stopService(new Intent(getApplicationContext(),ServiceMusic.class));
+                finishAffinity();
+            }
+        });
+
+        menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        menuDialog.show();
+    }
+    private void showEndDialog(String tv){
+        menuDialog = new Dialog(this);
+        menuDialog.setContentView(R.layout.end_dialog);
+        RePlay = (Button) menuDialog.findViewById(R.id.btnRePlay);
+        GoBackMenu = (Button) menuDialog.findViewById(R.id.btnBackMenu);
+        GoBackMenu = (Button) menuDialog.findViewById(R.id.btnBackMenu);
+        tvTitleEnd = (TextView) menuDialog.findViewById(R.id.tvTitleEnd);
+
+        if (tv.equals("TIME'S UP")){
+            tvTitleEnd.setText(tv);
+        }
+
+        RePlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        GoBackMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                stopService(new Intent(getApplicationContext(),ServiceMusic.class));
+            }
+        });
+
+        menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        menuDialog.setCancelable(false);
+        menuDialog.show();
+    }
+    private void showWrongDialog(){
+        menuDialog = new Dialog(this);
+        menuDialog.setContentView(R.layout.wrong_dialog);
+        menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        menuDialog.show();
     }
 }

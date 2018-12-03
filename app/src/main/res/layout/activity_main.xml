@@ -46,7 +46,7 @@
             android:onClick="ExitGame"/>
     </LinearLayout>
     <ImageButton
-        android:id="@+id/btnMusic"
+        android:onClick="btnMusic"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_alignParentEnd="true"

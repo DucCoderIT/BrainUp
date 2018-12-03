@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:gravity="center">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/cardview_dark_background"
+        app:cardCornerRadius="15dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:gravity="center"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tvTitleEnd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="YOU WRONG !"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="@color/colorAccent"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Replay or go back menu, please !"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:textColor="@color/colorAccent"/>
+            <Button
+                android:id="@+id/btnRePlay"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="RePlay"
+                />
+            <Button
+                android:id="@+id/btnBackMenu"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:text="Menu"
+                />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+</RelativeLayout>

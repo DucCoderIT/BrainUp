@@ -28,32 +28,26 @@ public class GameTypeActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.imgbtn_animals:
-                Toast.makeText(this, "animals", Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "onClick: animals");
                 gotoGAME(mode,"animals");
                 break;
             case R.id.imgbtn_house:
-                Toast.makeText(this, "house", Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "onClick: house");
                 gotoGAME(mode,"house");
                 break;
             case R.id.imgbtn_school:
-                Toast.makeText(this, "school", Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "onClick: school");
                 gotoGAME(mode,"school");
                 break;
             case R.id.imgbtn_vehicle:
-                Toast.makeText(this, "vehicle", Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "onClick: vehicle");
                 gotoGAME(mode,"vehicle");
                 break;
             case R.id.imgbtn_sport:
-                Toast.makeText(this, "sport", Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "onClick: sport");
                 gotoGAME(mode,"sport");
                 break;
             case R.id.imgbtn_vegetables:
-                Toast.makeText(this, "vegetables", Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "onClick: vegetables");
                 gotoGAME(mode,"vegetables");
                 break;
@@ -78,12 +72,14 @@ public class GameTypeActivity extends AppCompatActivity implements View.OnClickL
             case "select":
                 Log.d(TAG, "gotoGAME: select");
                 Intent intentSelect = new Intent(GameTypeActivity.this,GameSelectActivity.class);
+                intentSelect.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 intentSelect.putExtra("type",type);
                 startActivity(intentSelect);
                 break;
             case "write":
                 Log.d(TAG, "gotoGAME: write");
                 Intent intentWrite = new Intent(GameTypeActivity.this,GameWriteActivity.class);
+                intentWrite.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 intentWrite.putExtra("type",type);
                 startActivity(intentWrite);
                 break;

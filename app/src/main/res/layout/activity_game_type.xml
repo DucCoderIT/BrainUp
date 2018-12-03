@@ -38,7 +38,7 @@
                 android:layout_weight="1"
                 android:padding="10dp"
                 android:scaleType="fitXY"
-                android:src="@mipmap/animals"
+                android:src="@raw/animals"
                 android:background="#00000000"/>
             <ImageButton
                 android:id="@+id/imgbtn_vehicle"
@@ -47,7 +47,7 @@
                 android:layout_weight="1"
                 android:padding="10dp"
                 android:scaleType="fitXY"
-                android:src="@mipmap/vehicle"
+                android:src="@raw/vehicle"
                 android:background="#00000000"/>
         </LinearLayout>
         <LinearLayout
@@ -63,7 +63,7 @@
                 android:layout_weight="1"
                 android:padding="10dp"
                 android:scaleType="fitXY"
-                android:src="@mipmap/house"
+                android:src="@raw/house"
                 android:background="#00000000"/>
             <ImageButton
                 android:id="@+id/imgbtn_sport"
@@ -72,7 +72,7 @@
                 android:layout_weight="1"
                 android:padding="10dp"
                 android:scaleType="fitXY"
-                android:src="@mipmap/sport"
+                android:src="@raw/sport"
                 android:background="#00000000"/>
         </LinearLayout>
         <LinearLayout
@@ -88,7 +88,7 @@
                 android:layout_weight="1"
                 android:padding="10dp"
                 android:scaleType="fitXY"
-                android:src="@mipmap/school"
+                android:src="@raw/school"
                 android:background="#00000000"/>
             <ImageButton
                 android:id="@+id/imgbtn_vegetables"
@@ -97,7 +97,7 @@
                 android:layout_weight="1"
                 android:padding="10dp"
                 android:scaleType="fitXY"
-                android:src="@mipmap/vegetable"
+                android:src="@raw/vegetable"
                 android:background="#00000000"/>
         </LinearLayout>
     </LinearLayout>

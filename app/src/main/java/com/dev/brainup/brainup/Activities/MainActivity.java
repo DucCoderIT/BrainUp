@@ -9,13 +9,18 @@ import android.view.View;
 
 import com.dev.brainup.brainup.DBHelper;
 import com.dev.brainup.brainup.R;
+import com.dev.brainup.brainup.ServiceMusic;
+
 public class MainActivity extends AppCompatActivity {
     private String TAG = "LOGMainActivity";
     private Dialog dialog;
+    private Boolean checkOnOffMusic = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //play music
+        startService(new Intent(this,ServiceMusic.class));
         //Hello
         DBHelper dbHelper = new DBHelper(this);
         dbHelper.getAllGames();
@@ -31,6 +36,16 @@ public class MainActivity extends AppCompatActivity {
     }
     public void ExitGame(View view){
         this.finishAffinity();
+        stopService(new Intent(getApplicationContext(),ServiceMusic.class));
         Log.d(TAG,"select exit");
+    }
+
+    public void btnMusic(View view) {
+        if (checkOnOffMusic){
+            stopService(new Intent(this, ServiceMusic.class));
+            checkOnOffMusic = false;
+        }else{
+            startService(new Intent(this, ServiceMusic.class));
+        }
     }
 }

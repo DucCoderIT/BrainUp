@@ -8,12 +8,22 @@
     android:weightSum="10"
     android:padding="16dp"
     tools:context=".Activities.GameSelectActivity">
+    <TextView
+        android:id="@+id/tv_countdowntime_S"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:textAlignment="center"
+        android:text="Bạn còn 15 s"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:gravity="center_vertical|start"
+        />
     <ImageView
         android:id="@+id/imgview_game"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="4"
-        android:src="@mipmap/sport"
+        android:layout_weight="3.5"
         android:scaleType="fitXY"/>
     <View
         android:layout_width="match_parent"
@@ -22,7 +32,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="4.5"
+        android:layout_weight="4"
         android:orientation="vertical">
         <RadioGroup
             android:id="@+id/radioGroup"
@@ -65,5 +75,9 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:text="GỬI KẾT QUẢ"/>
+        android:text="GỬI KẾT QUẢ"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:textColor="#fff"
+        android:background="#621663"/>
 </LinearLayout>
