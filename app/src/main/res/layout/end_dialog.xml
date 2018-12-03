@@ -29,26 +29,42 @@
                 android:text="YOU WRONG !"
                 android:textStyle="bold"
                 android:textSize="20sp"
-                android:textColor="@color/colorAccent"/>
+                android:textColor="@color/ButtonExit"/>
+            <TextView
+                android:id="@+id/tvScore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="Your score: 0"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:textColor="@color/white"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Replay or go back menu, please !"
                 android:textStyle="bold"
                 android:textSize="15sp"
-                android:textColor="@color/colorAccent"/>
+                android:textColor="@color/ButtonScore"/>
             <Button
                 android:id="@+id/btnRePlay"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="RePlay"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:background="@color/ButtonScore"
                 />
             <Button
                 android:id="@+id/btnBackMenu"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:text="Menu"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:background="@color/ButtonPlay"
                 />
         </LinearLayout>
     </android.support.v7.widget.CardView>

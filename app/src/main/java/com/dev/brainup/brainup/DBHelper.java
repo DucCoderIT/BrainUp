@@ -46,14 +46,34 @@ public class DBHelper extends SQLiteOpenHelper {
                     +") VALUES (0,\"animals\",1,\"animals_dog\",\"scorpion\",\"cobra\",\"dog\")," +
                     "(1,\"animals\",1,\"animals_cat\",\"buffalo\",\"bat\",\"cat\")," +
                     "(2,\"animals\",1,\"animals_butterfly\",\"wolf\",\"fly\",\"butterfly\")," +
-                    "(3,\"animals\",1,\"animals_lion\",\"beaver\",\"chipmunk\",\"lion\")," +
-                    "(4,\"animals\",1,\"animals_elephant\",\"deer\",\"cow\",\"elephant\")," +
-                    "(5,\"animals\",1,\"animals_fish\",\"alligator\",\"dolphin\",\"fish\")," +
-                    "(6,\"animals\",1,\"animals_frog\",\"whale\",\"swordfish\",\"frog\")," +
-                    "(7,\"animals\",1,\"animals_chicken\",\"walrus\",\"shark\",\"chicken\")," +
-                    "(8,\"animals\",1,\"animals_horse\",\"penguin\",\"scorpion\",\"horse\")," +
-                    "(9,\"animals\",1,\"animals_fox\",\"turtle\",\"antelope\",\"fox\")," +
-                    "(10,\"animals\",1,\"animals_buffalo\",\"cow\",\"penguin\",\"buffalo\");";
+                    "(3,\"animals\",2,\"animals_lion\",\"beaver\",\"chipmunk\",\"lion\")," +
+                    "(4,\"animals\",2,\"animals_elephant\",\"deer\",\"cow\",\"elephant\")," +
+                    "(5,\"animals\",2,\"animals_fish\",\"alligator\",\"dolphin\",\"fish\")," +
+                    "(6,\"animals\",3,\"animals_frog\",\"whale\",\"swordfish\",\"frog\")," +
+                    "(7,\"animals\",3,\"animals_chicken\",\"walrus\",\"shark\",\"chicken\")," +
+                    "(8,\"animals\",3,\"animals_horse\",\"penguin\",\"scorpion\",\"horse\")," +
+                    "(9,\"animals\",4,\"animals_fox\",\"turtle\",\"antelope\",\"fox\")," +
+                    "(10,\"animals\",4,\"animals_buffalo\",\"cow\",\"penguin\",\"buffalo\"),"+
+                    "(11,\"animals\",4,\"animals_bear\",\"bufferlow\",\"fly\",\"bear\"),"+
+                    "(12,\"animals\",5,\"animals_chimpanzee\",\"cat\",\"porcupinen\",\"chimpanzee\"),"+
+                    "(13,\"animals\",5,\"animals_elephant\",\"giraffe\",\"bear\",\"elephant\"),"+
+                    "(14,\"animals\",5,\"animals_porcupine\",\"rhinoceros\",\"lion\",\"porcupine\"\n),"+
+                    "(15,\"animals\",6,\"animals_rhinoceros\",\"giraffe\",\"chimpanzee\",\"rhinoceros\"),"+
+                    "(16,\"animals\",6,\"animals_hippopotamus\",\"squirrel\",\"raccoon\",\"hippopotamus\"),"+
+                    "(17,\"animals\",6,\"animals_squirrel\",\"fox\",\"hippopotamus\",\"squirrel\"),"+
+                    "(18,\"animals\",7,\"animals_alligator\",\"bat\",\"wolf\",\"alligator\"),"+
+                    "(19,\"animals\",7,\"animals_turtle\",\"penguin\",\"deer\",\"turtle\"),"+
+                    "(20,\"animals\",7,\"animals_beaver\",\"eel\",\"turtl\",\"beaver\"),"+
+                    "(21,\"animals\",8,\"animals_penguin\",\"chipmunk\",\"hermit crab\",\"penguin\"),"+
+                    "(22,\"animals\",8,\"animals_dolphin\",\"shark\",\"bat\",\"dolphin\"),"+
+                    "(23,\"animals\",8,\"animals_shark\",\"dolphin\",\"deer\",\"shark\"),"+
+                    "(24,\"animals\",9,\"animals_whale\",\"fox\",\"shark\",\"whale\"),"+
+                    "(25,\"animals\",9,\"animals_cobra\",\"scorpion\",\"camel\",\"cobra\"),"+
+                    "(26,\"animals\",9,\"animals_zebra\",\"donkey\",\"hedgehog\",\"zebra\"),"+
+                    "(27,\"animals\",10,\"animals_bison\",\"porcupinen\",\"squirrel\",\"bison\"),"+
+                    "(28,\"animals\",10,\"animals_octopus\",\"\uFEFFjellyfish\",\"squid\",\"octopus\"\n),"+
+                    "(29,\"animals\",10,\"animals_starfish\",\"\uFEFFstingray\",\"pufferfish\",\"starfish\"),"+
+                    "(30,\"animals\",10,\"animals_panda\",\"\uFEFFflying squirrel\",\"platypush\",\"panda\");";
             db.execSQL(addGame);
         Log.d(TAG, "onCreate: insert data completed");
     }

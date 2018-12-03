@@ -2,10 +2,10 @@ package com.dev.brainup.brainup.Activities;
 
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.CountDownTimer;
@@ -13,7 +13,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -30,19 +29,17 @@ import com.dev.brainup.brainup.ServiceMusic;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 public class GameSelectActivity extends AppCompatActivity implements View.OnClickListener {
     private ImageView imgView_game;
-    private TextView tv_countdowntime,tvTitleEnd;
+    private TextView tv_countdowntime,tvTitleEnd,tvScore;
     private RadioButton rdBtn_result,rdBtn_result1,rdBtn_result2,rdBtn_result3;
     private RadioGroup radioGroup;
-    private Button btn_sendResult, Resume,Menu,Exit,GoBackMenu,RePlay;
+    private Button btn_sendResult, Resume,Menu,Exit,GoBackMenu,RePlay,btnNextgame;
     private String typeGame;
     private String TAG = "LOG GAME SELECT";
-    private String png = ".png";
     private ArrayList<Game> game_type_list;
-    private int countGame;
+    private int countGame,countScore,level;
     private int countWrongtime = 0;
     private CountDownTimer countDownTimer;
     private Dialog menuDialog;
@@ -52,20 +49,19 @@ public class GameSelectActivity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_select);
         countDownTimer = new CountDownTimer(60000, 1000) {
-
             public void onTick(long millisUntilFinished) {
-                tv_countdowntime.setText("Thời gian đếm ngược: " + millisUntilFinished / 1000);
+                tv_countdowntime.setText("Time: " + millisUntilFinished / 1000);
             }
-
             public void onFinish() {
                 showEndDialog("TIME'S UP");
             }
         };
-
+        countScore = 0;
+        level = 2;
         handle();
         getInfoGame();
         if (game_type_list.size() > 0){
-            countGame = 0;
+            RandomGame();
             setInfoGame(countGame);
         }
         //count down time in game
@@ -74,29 +70,38 @@ public class GameSelectActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_sendresult:
-                int selectedID = radioGroup.getCheckedRadioButtonId();
-                rdBtn_result = (RadioButton) findViewById(selectedID);
-                String value = String.valueOf(rdBtn_result.getText());
-                String result = game_type_list.get(countGame).getResulttrue();
-                if (value.equalsIgnoreCase(result)){
-                    Toast.makeText(this, "Chúc mừng, bạn đã trả lời chính xác", Toast.LENGTH_SHORT).show();
-                    if (countGame < game_type_list.size() -1) {
-                        countDownTimer.cancel();
-                        countGame +=1;
-                        setInfoGame(countGame);
-                    }else Toast.makeText(this, "Bạn quá giỏi! Hết game của tui rồi!", Toast.LENGTH_SHORT).show();
-                }else{
-                    if (countWrongtime < 1){
-                        countWrongtime += 1;
-                        showWrongDialog();
+                if(rdBtn_result1.isChecked()|rdBtn_result2.isChecked()|rdBtn_result3.isChecked()) {
+                    int selectedID = radioGroup.getCheckedRadioButtonId();
+
+                    rdBtn_result = (RadioButton) findViewById(selectedID);
+                    String value = String.valueOf(rdBtn_result.getText());
+                    String result = game_type_list.get(countGame).getResulttrue();
+                    if (value.equalsIgnoreCase(result)) {
+                        if (countGame < game_type_list.size() - 1) {
+                            // Show dialog congratulation
+                            showCongraDialog();
+                            radioGroup.clearCheck(); // clear check radio button
+                            countDownTimer.cancel(); // stop countdown time
+                        }
+                    } else {
+                        if (countWrongtime < 1) {
+                            countWrongtime += 1; // count wrong time
+                            showWrongDialog(); // show wrong dialog
+                            radioGroup.clearCheck();
+                        } else {
+                            countDownTimer.cancel(); //stop count down time
+                            countWrongtime = 0; // count wrong time
+                            showEndDialog(""); // show wrong dialog
+                            SharedPreferences sharedPref = getSharedPreferences("MyScore",Context.MODE_PRIVATE);
+                            int highscore = sharedPref.getInt("score",0);
+                            if (countScore > highscore){
+                                SharedPreferences.Editor editor = sharedPref.edit();
+                                editor.putInt("score", countScore);
+                                editor.commit();
+                            }
+                        }
                     }
-                    else{
-                        countDownTimer.cancel();
-                        countGame =0;
-                        countWrongtime = 0;
-                        showEndDialog("");
-                    }
-                }
+                }else Toast.makeText(this, "You must choose one result!", Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -159,7 +164,14 @@ public class GameSelectActivity extends AppCompatActivity implements View.OnClic
     private void setRdbtn(RadioButton rdbtn,String Result){
         rdbtn.setText(Result);
     }
-
+    //
+    private void RandomGame(){
+        ArrayList<Integer> numberRandom = new ArrayList<Integer>();
+        for (int i = level - 2 ; i <= level ; ++i) numberRandom.add(i);
+        Collections.shuffle(numberRandom);
+        countGame = numberRandom.get(0);
+    }
+    //
     private void showMenuDialog(){
         menuDialog = new Dialog(this);
         menuDialog.setContentView(R.layout.menu_dialog);
@@ -171,19 +183,24 @@ public class GameSelectActivity extends AppCompatActivity implements View.OnClic
         Resume.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                menuDialog.dismiss();
+                menuDialog.cancel();
             }
         });
         Menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                menuDialog.cancel();
                 stopService(new Intent(getApplicationContext(),ServiceMusic.class));
+                Intent intentToMain = new Intent(getApplicationContext(),MainActivity.class);
+                intentToMain.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intentToMain);
+                finish();
             }
         });
         Exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                menuDialog.cancel();
                 stopService(new Intent(getApplicationContext(),ServiceMusic.class));
                 finishAffinity();
             }
@@ -198,21 +215,32 @@ public class GameSelectActivity extends AppCompatActivity implements View.OnClic
         RePlay = (Button) menuDialog.findViewById(R.id.btnRePlay);
         GoBackMenu = (Button) menuDialog.findViewById(R.id.btnBackMenu);
         tvTitleEnd = (TextView) menuDialog.findViewById(R.id.tvTitleEnd);
+        tvScore = (TextView) menuDialog.findViewById(R.id.tvScore);
 
-        if (tv.equals("TIME'S UP")){
+        if (!(tv.equals(""))){
             tvTitleEnd.setText(tv);
         }
+        tvScore.setText("Your score: "+countScore);
         RePlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                countScore = 0;
+                level = 0;
+                RandomGame();
+                setInfoGame(countGame);
+                radioGroup.clearCheck();
+                menuDialog.cancel();
             }
         });
         GoBackMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                menuDialog.cancel();
                 stopService(new Intent(getApplicationContext(),ServiceMusic.class));
+                Intent intentToMain = new Intent(getApplicationContext(),MainActivity.class);
+                intentToMain.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intentToMain);
+                finish();
             }
         });
 
@@ -223,6 +251,30 @@ public class GameSelectActivity extends AppCompatActivity implements View.OnClic
     private void showWrongDialog(){
         menuDialog = new Dialog(this);
         menuDialog.setContentView(R.layout.wrong_dialog);
+        menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        menuDialog.show();
+    }
+    private void showCongraDialog(){
+        menuDialog = new Dialog(this);
+        menuDialog.setContentView(R.layout.congra_dialog);
+        menuDialog.setCanceledOnTouchOutside(false);
+        menuDialog.setCancelable(false);
+        btnNextgame = (Button) menuDialog.findViewById(R.id.btnNextgame);
+        btnNextgame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                menuDialog.cancel();
+                level += 3; // count game up
+                RandomGame();
+                countScore += 1; // score up
+                if (countScore < 10) {
+                    setInfoGame(countGame); // next game
+                } else {
+                    showEndDialog("YOU WIN GAME! THANK YOU");
+                }
+            }
+        });
+
         menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         menuDialog.show();
     }

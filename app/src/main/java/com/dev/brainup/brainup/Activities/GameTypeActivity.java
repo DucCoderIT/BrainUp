@@ -20,7 +20,6 @@ public class GameTypeActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_type);
         mode = getIntent().getExtras().getString("mode");
-        Toast.makeText(this, mode, Toast.LENGTH_SHORT).show();
         handle();
     }
 
@@ -75,6 +74,7 @@ public class GameTypeActivity extends AppCompatActivity implements View.OnClickL
                 intentSelect.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 intentSelect.putExtra("type",type);
                 startActivity(intentSelect);
+                finish();
                 break;
             case "write":
                 Log.d(TAG, "gotoGAME: write");
@@ -82,6 +82,7 @@ public class GameTypeActivity extends AppCompatActivity implements View.OnClickL
                 intentWrite.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 intentWrite.putExtra("type",type);
                 startActivity(intentWrite);
+                finish();
                 break;
         }
     }

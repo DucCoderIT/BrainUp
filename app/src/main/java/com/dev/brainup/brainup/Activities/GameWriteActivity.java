@@ -1,7 +1,9 @@
 package com.dev.brainup.brainup.Activities;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.CountDownTimer;
@@ -22,39 +24,42 @@ import com.dev.brainup.brainup.R;
 import com.dev.brainup.brainup.ServiceMusic;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class GameWriteActivity extends AppCompatActivity implements View.OnClickListener {
     private ImageView imgView_game;
-    private TextView tv_countdowntime,tvTitleEnd;
+    private TextView tv_countdowntime,tvTitleEnd,tvScore;
     private EditText edt_Result;
-    private Button btn_sendResult, Resume,Menu,Exit,GoBackMenu,RePlay;
+    private Button btn_sendResult, Resume,Menu,Exit,GoBackMenu,RePlay,btnNextgame;
     private String typeGame;
     private String TAG = "LOG GAME WRITE";
     private ArrayList<Game> game_type_list;
-    private int countGame;
     private Dialog menuDialog;
-    private boolean countWrongtime = true;
+    private int countGame,countScore,level;
+    private int countWrongtime = 0;
+    private CountDownTimer countDownTimer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_write);
-        handle();
-        getInfoGame();
-        if (game_type_list.size() > 0){
-            countGame = 0;
-            setInfoGame(countGame);
-        }
-        //count down time in game
-        new CountDownTimer(60000, 1000) {
-
+        countDownTimer = new CountDownTimer(60000, 1000) {
             public void onTick(long millisUntilFinished) {
-                tv_countdowntime.setText("Thời gian đếm ngược: " + millisUntilFinished / 1000);
+                tv_countdowntime.setText("Time: " + millisUntilFinished / 1000);
             }
-
             public void onFinish() {
                 showEndDialog("TIME'S UP");
             }
-        }.start();
+        };
+        handle(); //
+        getInfoGame(); //
+        countScore = 0; //
+        level = 2; //
+        if (game_type_list.size() > 0){ // check empty arr
+            RandomGame();
+            setInfoGame(countGame);
+        }
+        //count down time in game
+
     }
 
     @Override
@@ -63,21 +68,34 @@ public class GameWriteActivity extends AppCompatActivity implements View.OnClick
             case R.id.btn_sendresult:
                 String value = edt_Result.getText().toString();
                 String result = game_type_list.get(countGame).getResulttrue();
-                if (value.equalsIgnoreCase(result)){
-                    Toast.makeText(this, "Chúc mừng, bạn đã trả lời chính xác!", Toast.LENGTH_SHORT).show();
-                    countGame += 1;
-                    setInfoGame(countGame);
-                    edt_Result.setText("");
-                    edt_Result.isClickable();
-                }
-                else {
-                    if (countWrongtime){
-                        showWrongDialog();
-                        countWrongtime = false;
-                    }else{
-                        showEndDialog("");
+                if (!(value.equals(""))){
+                    if (value.equalsIgnoreCase(result)) {
+                        if (countGame < game_type_list.size() - 1) {
+                            showCongraDialog(); // Show dialog congratulation
+                            edt_Result.setText(""); // set null for text view
+                            countDownTimer.cancel(); // stop countdown time
+                        }
+                    } else {
+                        if (countWrongtime < 1) {
+                            countWrongtime += 1; // count wrong time
+                            edt_Result.setText(""); // set null for text view
+                            showWrongDialog(); // show wrong dialog
+                        } else {
+                            countDownTimer.cancel(); //stop count down time
+                            countWrongtime = 0; // count wrong time
+                            edt_Result.setText(""); // set null for text view
+                            showEndDialog(""); // show wrong dialog
+                            SharedPreferences sharedPref = getSharedPreferences("MyScore",Context.MODE_PRIVATE);
+                            int highscore = sharedPref.getInt("score",0);
+                            if (countScore > highscore){
+                                SharedPreferences.Editor editor = sharedPref.edit();
+                                editor.putInt("score", countScore);
+                                editor.commit();
+                            }
+                        }
                     }
                 }
+                else Toast.makeText(this, "You must write somethings!", Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -89,7 +107,7 @@ public class GameWriteActivity extends AppCompatActivity implements View.OnClick
 
     private void handle(){
         imgView_game = (ImageView) findViewById(R.id.imgview_game);
-        tv_countdowntime = (TextView) findViewById(R.id.tv_countdowntime_W);
+        tv_countdowntime = (TextView) findViewById(R.id.tv_countdowntime_write);
         edt_Result = (EditText) findViewById(R.id.edt_result);
         btn_sendResult = (Button) findViewById(R.id.btn_sendresult);
         btn_sendResult.setOnClickListener(this);
@@ -107,8 +125,17 @@ public class GameWriteActivity extends AppCompatActivity implements View.OnClick
     private void setInfoGame(int position){
         int id = getResources().getIdentifier(game_type_list.get(position).getImage(),"raw",getPackageName());
         imgView_game.setImageResource(id);
+        countDownTimer.start();
     }
 
+    //
+    private void RandomGame(){
+        ArrayList<Integer> numberRandom = new ArrayList<Integer>();
+        for (int i = level - 2 ; i <= level ; ++i) numberRandom.add(i);
+        Collections.shuffle(numberRandom);
+        countGame = numberRandom.get(0);
+    }
+    //
     private void showMenuDialog(){
         menuDialog = new Dialog(this);
         menuDialog.setContentView(R.layout.menu_dialog);
@@ -120,19 +147,24 @@ public class GameWriteActivity extends AppCompatActivity implements View.OnClick
         Resume.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                menuDialog.dismiss();
+                menuDialog.cancel();
             }
         });
         Menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                menuDialog.cancel();
                 stopService(new Intent(getApplicationContext(),ServiceMusic.class));
+                Intent intentToMain = new Intent(getApplicationContext(),MainActivity.class);
+                intentToMain.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intentToMain);
+                finish();
             }
         });
         Exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                menuDialog.cancel();
                 stopService(new Intent(getApplicationContext(),ServiceMusic.class));
                 finishAffinity();
             }
@@ -146,24 +178,33 @@ public class GameWriteActivity extends AppCompatActivity implements View.OnClick
         menuDialog.setContentView(R.layout.end_dialog);
         RePlay = (Button) menuDialog.findViewById(R.id.btnRePlay);
         GoBackMenu = (Button) menuDialog.findViewById(R.id.btnBackMenu);
-        GoBackMenu = (Button) menuDialog.findViewById(R.id.btnBackMenu);
         tvTitleEnd = (TextView) menuDialog.findViewById(R.id.tvTitleEnd);
+        tvScore = (TextView) menuDialog.findViewById(R.id.tvScore);
 
-        if (tv.equals("TIME'S UP")){
+        if (!(tv.equals(""))){
             tvTitleEnd.setText(tv);
         }
-
+        tvScore.setText("Your score: "+countScore);
         RePlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                countScore = 0;
+                level = 2;
+                edt_Result.setText(""); // set null for text view
+                RandomGame(); //random number game
+                setInfoGame(countGame); // set info for game
+                menuDialog.dismiss(); //dismiss dialog
             }
         });
         GoBackMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                menuDialog.dismiss();
                 stopService(new Intent(getApplicationContext(),ServiceMusic.class));
+                Intent intentToMain = new Intent(getApplicationContext(),MainActivity.class);
+                intentToMain.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intentToMain);
+                finish();
             }
         });
 
@@ -174,6 +215,30 @@ public class GameWriteActivity extends AppCompatActivity implements View.OnClick
     private void showWrongDialog(){
         menuDialog = new Dialog(this);
         menuDialog.setContentView(R.layout.wrong_dialog);
+        menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        menuDialog.show();
+    }
+    private void showCongraDialog(){
+        menuDialog = new Dialog(this);
+        menuDialog.setContentView(R.layout.congra_dialog);
+        menuDialog.setCanceledOnTouchOutside(false);
+        menuDialog.setCancelable(false);
+        btnNextgame = (Button) menuDialog.findViewById(R.id.btnNextgame);
+        btnNextgame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                menuDialog.dismiss();
+                level += 3; // count game up
+                RandomGame();
+                countScore += 1; // score up
+                if (countScore < 10) {
+                    setInfoGame(countGame); // next game
+                } else {
+                    showEndDialog("YOU WIN GAME! THANK YOU");
+                }
+            }
+        });
+
         menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         menuDialog.show();
     }

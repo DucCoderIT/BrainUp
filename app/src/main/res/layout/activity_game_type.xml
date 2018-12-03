@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="10"
+    android:background="@drawable/backgroundgame"
     tools:context=".Activities.GameTypeActivity">
     <!-- text: select category -->
     <TextView
@@ -15,6 +16,7 @@
         android:gravity="center"
         android:text="SELECT CATEGORY"
         android:textSize="20sp"
+        android:textColor="@color/ButtonExit"
         android:textStyle="bold"/>
     <!-- view categories -->
     <LinearLayout
@@ -23,8 +25,7 @@
         android:layout_weight="9"
         android:padding="20dp"
         android:orientation="vertical"
-        android:weightSum="3"
-        android:background="#fff000">
+        android:weightSum="3">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"

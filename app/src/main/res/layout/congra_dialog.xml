@@ -22,36 +22,32 @@
             android:padding="16dp"
             android:gravity="center"
             android:orientation="vertical">
-            <Button
-                android:id="@+id/Resume"
-                android:layout_width="200dp"
+            <TextView
+                android:id="@+id/tvCongratulation"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:text="Resume"
+                android:layout_margin="10dp"
+                android:text="Congratulation ! You right !"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:textColor="@color/white"/>
+            <TextView
+                android:id="@+id/tvletsnextgame"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Let's next game !"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:textColor="@color/ButtonScore"/>
+            <Button
+                android:id="@+id/btnNextgame"
+                android:layout_width="100dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
+                android:text="ok"
                 android:textSize="18sp"
                 android:textColor="@color/white"
-                android:background="@color/ButtonScore"
-                />
-            <Button
-                android:id="@+id/Menu"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:text="menu"
-                android:textSize="18sp"
-                android:textColor="@color/white"
-                android:background="@color/ButtonPlay"
-                />
-            <Button
-                android:id="@+id/Exit"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:text="exit"
-                android:textSize="18sp"
-                android:textColor="@color/white"
-                android:background="@color/ButtonExit"
-                />
+                android:background="@color/ButtonPlay"/>
         </LinearLayout>
     </android.support.v7.widget.CardView>
 
